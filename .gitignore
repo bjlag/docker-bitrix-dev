@@ -1,3 +1,3 @@
 .idea/
-docker/log
-docker/data
+docker/var/log
+docker/var/data
