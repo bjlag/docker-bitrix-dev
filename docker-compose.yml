@@ -1,12 +1,21 @@
-version: '3'
+version: '2'
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.172.0.0/16
+          gateway: 172.172.0.1
 
 services:
   nginx:
     image: nginx:1.13
     container_name: nginx
     ports:
-      - '0.0.0.0:80:80'
-      - '0.0.0.0:443:443'
+      - '8888:80'
+      - '4433:443'
     volumes:
       - ./src:/var/www/html
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
@@ -15,6 +24,10 @@ services:
     depends_on:
       - apache
     restart: always
+    networks:
+      default:
+        aliases:
+          - dev.local
 
   apache:
     image: httpd:2.4
@@ -26,6 +39,8 @@ services:
     depends_on:
       - php
     restart: always
+    networks:
+      - default
 
   php:
     build: ./docker/php71
@@ -37,12 +52,14 @@ services:
     depends_on:
       - db
     restart: always
+    networks:
+      - default
 
   db:
     image: mysql:5.7
     container_name: db
     ports:
-        - '0.0.0.0:3306:3306'
+        - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: dev
@@ -53,6 +70,8 @@ services:
       - ./docker/data/mysql:/var/lib/mysql
       - ./docker/log/mysql:/var/log/mysql
     restart: always
+    networks:
+      - default
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -64,12 +83,14 @@ services:
     depends_on:
       - db
     restart: always
+    networks:
+      - default
 
-  memcached:
-    image: memcached:1.5
-    container_name: memcached
-    volumes:
-      - ./docker/log/memcached:/var/log/memcached
-      - ./docker/data/memcached:/var/lib/memcached
-    ports:
-      - '0.0.0.0:11211:11211'
+#  memcached:
+#    image: memcached:1.5
+#    container_name: memcached
+#    volumes:
+#      - ./docker/log/memcached:/var/log/memcached
+#      - ./docker/data/memcached:/var/lib/memcached
+#    ports:
+#      - '0.0.0.0:11211:11211'
