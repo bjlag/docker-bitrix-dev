@@ -20,6 +20,7 @@ services:
       - ./src:/var/www/html
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/upstream.conf:/etc/nginx/conf.d/upstream.conf
+      - ./docker/nginx/site.conf:/etc/nginx/conf.d/site.conf
       - ./docker/ssl:/etc/ssl # todo: генерить в контейнере
       - ./docker/var/log/nginx:/var/log/nginx
     depends_on:
