@@ -19,28 +19,16 @@ services:
     volumes:
       - ./src:/var/www/html
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./docker/ssl:/etc/ssl
+      - ./docker/nginx/upstream.conf:/etc/nginx/conf.d/upstream.conf
+      - ./docker/ssl:/etc/ssl # todo: генерить в контейнере
       - ./docker/log/nginx:/var/log/nginx
     depends_on:
-      - apache
+      - php
     restart: always
     networks:
       default:
         aliases:
           - dev.local
-
-  apache:
-    image: httpd:2.4
-    container_name: apache
-    volumes:
-      - ./src:/var/www/html
-      - ./docker/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
-      - ./docker/log/httpd:/var/log/apache2
-    depends_on:
-      - php
-    restart: always
-    networks:
-      - default
 
   php:
     build: ./docker/php71
