@@ -1,12 +1,14 @@
 # Docker Bitrix Dev
 
+Окружение предназначено для локальной разработки, не для продакшена.
+
 * Nginx
 * PHP
 * MySQL
 * sSMTP
-* phpMyAdmin 
 * Xdebug
 * OPcache
+* phpMyAdmin 
 
 ## Структура папок
 
@@ -32,7 +34,7 @@ git clone https://github.com/bjlag/docker-bitrix-dev.git
 
 ### Подключение к базе MySQL
 
-Параметры подключения указываются в файле docker-compose.yml у контейнера db.
+Параметры подключения указываются в файле _docker-compose.yml_ у контейнера **db** в секции **environment**.
 
 ````
 Хост:                   db
@@ -41,7 +43,18 @@ git clone https://github.com/bjlag/docker-bitrix-dev.git
 Пароль пользователя:    dev
 ````
 
-Файлы базы хранятся в папке **/docker/var/data/mysql**.
+Файлы базы хранятся в папке _/docker/var/data/mysql_.
+
+**phpMyAdmin** по адресу _dev.local:8080_.
+
+Чтобы подключиться, например, через MySQLWorkbench указываем:
+
+````
+Хост:                   localhost
+Порт:                   3306
+Имя пользователя:       dev
+Пароль пользователя:    dev
+````
 
 ### Отправка почты через sSMTP
 
@@ -50,18 +63,31 @@ git clone https://github.com/bjlag/docker-bitrix-dev.git
 * /docker/php71/ssmtp/ssmtp.conf
 * /docker/php71/ssmtp/revaliases
 
-Все готово для отправки через Yandex. Пользователя и пароль SMTP сервера указываем в **ssmtp.conf**. В файле **revaliases** обазательно указать email, с которого отравляется почта. 
+Все готово для отправки через Yandex. Пользователя и пароль SMTP сервера указываем в _ssmtp.conf_. В файле _revaliases_ обазательно указать email, с которого отравляется почта. 
 
 Для отравки через Gmail закомментировать сроку с параметром **UseTLS=YES** и раскомментировать **UseSTARTTLS=YES**.
 
 ## Сборка
 
+Выполнить команду:
+
 ```
 docker-compose up -d --build
 ```
 
-Сайт доступен по адресу **localhost**  
-phpMyAdmin **localhost:8080**
+Сайт будет доступен по адресу _localhost:8888_.
+
+Чтобы сайт открывался по доменному имени, например, _dev.local:8888_, добавляем запись в файл _/etc/hosts_.
+
+```
+127.0.0.1       dev.local
+```
+
+Чтобы изменения вступили в силу, рекомендуется выполнить в терминале команду (macOS) для обновления DNS записей:
+
+```
+dscacheutil -flushcache
+```
 
 ## Остановить проект
 
@@ -80,3 +106,8 @@ docker-compose stop
 ```
 docker-compose down
 ```
+
+## Полезные скрипты
+
+[bitrixsetup.php](http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php)  
+[restore.php](http://www.1c-bitrix.ru/download/scripts/restore.php)
