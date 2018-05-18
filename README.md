@@ -112,4 +112,5 @@ docker-compose down
 ## Полезные скрипты
 
 [bitrixsetup.php](http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php)  
-[restore.php](http://www.1c-bitrix.ru/download/scripts/restore.php)
+[restore.php](http://www.1c-bitrix.ru/download/scripts/restore.php)  
+[bitrix_server_test.php](http://dev.1c-bitrix.ru/download/scripts/bitrix_server_test.php)
