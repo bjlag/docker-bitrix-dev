@@ -1,18 +1,39 @@
 FROM php:7.1-fpm
 
 RUN apt-get update \
-    && docker-php-ext-install \
-        pdo \
-        pdo_mysql \
+    && apt-get install -y --no-install-recommends \
+        libpq-dev \
+        libmemcached-dev \
+        libjpeg-dev \
+        libpng12-dev \
+        libfreetype6-dev \
+        libssl-dev \
+        libmcrypt-dev \
+        curl \
+        ssmtp \
+    && docker-php-ext-configure gd \
+        --enable-gd-native-ttf \
+        --with-jpeg-dir=/usr/include \
+        --with-freetype-dir=/usr/include \
+    && docker-php-ext-install -j$(nproc) \
+        mcrypt \
+        opcache \
+        gd \
         mysqli \
-    && rm -r /var/lib/apt/lists/*
-
-RUN pecl install redis-4.0.1 \
-    && pecl install xdebug-2.6.0 \
-    && docker-php-ext-enable opcache redis xdebug
+        pdo_mysql \
+    && pecl install \
+        xdebug \
+        memcached \
+    && docker-php-ext-enable \
+        memcached \
+        xdebug \
+    && docker-php-source delete \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/cache/apt/*
 
 RUN usermod -u 1000 www-data
 
 WORKDIR /var/www/html
 
 EXPOSE 9000
+
+CMD ["php-fpm"]

@@ -36,7 +36,10 @@ services:
     container_name: php
     volumes:
       - ./src:/var/www/html
-      - ./docker/php71/php.ini:/usr/local/etc/php/conf.d/php71.ini
+      - ./docker/php71/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/php71/conf.d/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./docker/php71/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./docker/php71/php-fpm.d/php-fpm.conf:/usr/local/etc/php-fpm.d/php-fpm.conf
       - ./docker/var/log/php:/var/log/php
     depends_on:
       - db

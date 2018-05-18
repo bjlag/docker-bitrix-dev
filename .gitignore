@@ -1,3 +1,4 @@
 .idea/
 docker/var/log
 docker/var/data
+note.txt
